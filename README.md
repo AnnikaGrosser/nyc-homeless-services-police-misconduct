@@ -4,7 +4,7 @@ This repository contains data and findings for an ongoing investigation in colla
 
 ## Documents and data
 ### Documents we obtained
-We filed open-records requests to New York City’s Department of Homeless Services (DHS) for all disciplinary files the agency is required to disclose under Brady-Giglio, which flags officers who may be untrustworthy in court. The agency is required to provide these documents to the public after the June 2020 repeal of 50-a, a law that had previously kept police disciplinary files secret.
+We filed open-records requests to New York City’s Department of Homeless Services (DHS) for all disciplinary files the agency is required to disclose under Brady v. Maryland and Giglio v. United States, two cases that force police departments and prosecutors to flag officers who may be untrustworthy in court. DHS began providing these documents to district attorney’s offices after the June 2020 repeal of 50-a, a law that had previously kept police disciplinary files secret. These files are being made public for the first time.
 
 ### Limitations in scope of documents and time period 
 These disciplinary files may not be every disciplinary file pertaining to an officer employed by the Department of Homeless Service. Instead, these are records that were provided to prosecutors under the prosecutors' obligations to provide materials like this to criminal defendants.
