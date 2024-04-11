@@ -1,0 +1,328 @@
+---
+title: "Fact-checking numbers and dates in the story"
+execute:
+  output: false
+  #echo: false
+format:
+  html:
+    code-tools: true
+    theme: cosmo
+    toc: true
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(readxl)
+library(here)
+library(lubridate)
+library(DT)
+library(stats)
+library(plotly)
+```
+## Loading data 
+```{r}
+# Read in data and give each row of data a unique id to count them 
+# Make Excel dates agree with R 
+df <- read_excel(here("data", "manual", "document_annotated_data.xlsx")) %>% 
+  clean_names() %>% 
+  mutate(incident_id = sprintf("%03d", 1:66)) %>% 
+  mutate(date_of_incident = as.Date(date_of_incident, origin = "1900-01-01")) %>% 
+  mutate(date_of_letter = as.Date(date_of_letter, origin = "1900-01-01")) %>% 
+  mutate(date_of_conference = as.Date(date_of_conference, origin = "1900-01-01"))
+  
+```
+
+## Number of incidents
+- We chose to include the two incidents that we lacked sufficient documentation for 
+
+::: {.callout-note}
+## Text in story 
+"**The 66 total incidents** of misconduct - spanning from 1998 to 2023..."
+:::
+
+```{r}
+# There are 66 incidents if you count each row as a unique incident
+num_total_incidents <- n_distinct(df$incident_id)
+```
+
+
+## Number of officers
+::: {.callout-note}
+## Text in story 
+"Through public records requests, MuckRock and New York Focus uncovered disciplinary incidents **involving 31 officers**..."
+:::
+
+```{r}
+# There are 31 unique officer names in the data
+num_total_officers <- n_distinct(df$name)
+```
+
+
+## Oldest and most recent complaints
+::: {.callout-note}
+## Text in story 
+"The 66 total incidents of misconduct - **spanning from 1998 to 2023**..."
+:::
+
+```{r}
+# 1998-06-13
+oldest <- min(df$date_of_incident)
+# 2023-02-17
+newest <- max(df$date_of_incident)
+```
+
+
+## Number of officers involved in multiple incidents
+- 11 out of 31 officers, what we call "many", were involved in multiple incidents
+
+::: {.callout-note}
+## Text in story 
+"Through public records requests, MuckRock and New York Focus have uncovered disciplinary incidents involving 31 officers, **many of them repeat offenders.**"
+:::
+
+```{r}
+repeat_count_by_officers <- df %>% 
+  group_by(name) %>% 
+  summarize(num_incidents = n_distinct(incident_id)) %>% 
+  filter(num_incidents >= 2) %>% 
+  arrange((desc(num_incidents)))
+
+```
+
+```{r}
+#| echo: false
+#| output: true
+datatable(repeat_count_by_officers, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+
+```
+
+## Percentage of cases involving our top three repeat officers
+::: {.callout-note}
+## Text in story 
+"And just three officers were involved in **more than a third of all incidents**."
+:::
+
+
+```{r}
+# The top three repeat offenders are Cardona (11), Dudzik (9) and DiDonato (7)
+top_three <- repeat_count_by_officers %>% 
+  slice(1:3)
+
+# 27 / 66 ~ 40 percent 
+top_three_percentage <- sum(top_three$num_incidents)/num_total_incidents
+
+```
+
+
+## Number of incidents that involve use of force 
+::: {.callout-note}
+## Text in story 
+"About **one-fifth of all the incidents** of misconduct reviewed were cases of excessive use of force..."
+:::
+
+```{r}
+# 14 cases cases involved use of force 
+# 14/66 = 21% 
+force_incidents <- df %>% 
+  filter(all_excessive_force_cases_agains_shelter_residents == TRUE) %>% 
+  select(name, date_of_incident, injury_details, days_of_suspension)
+
+```
+
+
+```{r}
+#| echo: false
+#| output: true
+datatable(force_incidents, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+
+```
+
+## Repeat offenders and use of force
+- 9 of 12 officers involved in use of force misconduct were involved in more than one incident
+
+::: {.callout-note}
+## Text in story 
+"About one-fifth of all the incidents of misconduct reviewed were cases of excessive use of force... **Most were perpetrated by repeat** offenders.
+:::
+```{r}
+# Joining the use of force incidents repeat offenders gives us 9 repeat offenders out of 12 officers in use of force, so 75%  
+repeat_offenders_force <- force_incidents %>% 
+  inner_join(repeat_count_by_officers, by = "name")
+```
+
+```{r}
+#| echo: false
+#| output: true
+datatable(repeat_offenders_force, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+```
+
+
+## Range of suspension time for use of force 
+::: {.callout-note}
+## Text in story 
+"Out of 13 incidents described by the Department as involving "excessive use of force," for example, **suspensions varied from 5 to 55 days**."
+:::
+```{r}
+suspsension_use_of_force <- force_incidents %>% 
+  select(name, days_of_suspension)
+
+```
+
+```{r}
+#| echo: false
+#| output: true
+datatable(suspsension_use_of_force, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+```
+
+## Median time it takes for officers to be suspended 
+::: {.callout-note}
+## Text in story 
+"Previously unreleased disciplinary files show that it **often takes DHS a half a year or more** to formally suspend officers found guilty of misconduct."
+:::
+```{r}
+time_to_supsensions <- df %>% 
+  mutate(days_to_conference = as.numeric(date_of_incident - date_of_conference)) %>%
+  mutate(days_to_letter = abs(as.numeric(date_of_incident - date_of_letter))) %>% 
+  filter(!is.na(date_of_letter)) %>% 
+  select(name, date_of_incident, date_of_letter, days_to_letter)
+
+# 41 of 66 cases is 62% and 41 of 52 is 78% 
+# 276 days from incident to letter or about 9 months
+avg_to_letter_all <- median(time_to_supsensions$days_to_letter)
+
+```
+### Time from incident to suspension for all suspensions 
+```{r}
+#| echo: false
+#| output: true
+datatable(time_to_supsensions, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+```
+
+```{r}
+#| echo: false
+#| output: true
+ggplotly(time_to_supsensions %>% 
+  ggplot(aes(x=days_to_letter, y = )) +
+  geom_histogram(fill="#69b3a2", color="#e9ecef", alpha=0.8))
+```
+### Total of suspension Cardona has recieved and lapse of time in Cardona's punishment
+::: {.callout-note}
+## Text in story 
+"Cardona was suspended for **six additional minor incidents**, which included losing her uniform hat and failing to submit her timesheet in a timely manner. Between 2017 and 2022, **she accumulated almost five months** of suspensions **across 11 separate disciplinary infractions**. 
+."
+:::
+
+```{r}
+# 148 days / 30 days month  or 4.9 months 
+officer_days_supsended <- df %>% 
+  group_by(name) %>% 
+  summarize(days_suspended = sum(days_of_suspension, na.rm=TRUE))
+
+# Days to letter checks out 42 to 842 
+cardona <- df %>% 
+  filter(name == "Melina Cardona") %>% 
+  mutate(days_to_conference = as.numeric(date_of_incident - date_of_conference)) %>%
+  mutate(days_to_letter = as.numeric(date_of_incident - date_of_letter)) %>% 
+  select(name, date_of_incident, date_of_letter, days_to_letter, days_of_suspension)
+
+# Days to letter checks out 42 to 842 
+didonato <- df %>% 
+  filter(name == "James DiDonato") %>% 
+  mutate(days_to_conference = as.numeric(date_of_incident - date_of_conference)) %>%
+  mutate(days_to_letter = as.numeric(date_of_incident - date_of_letter)) %>% 
+  select(name, date_of_incident, date_of_letter, days_to_letter, days_of_suspension, excessive_force, excessive_force_during_arrest)
+
+
+```
+
+
+```{r}
+#| echo: false
+#| output: true
+datatable(cardona, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+```
+
+```{r}
+#| echo: false
+#| output: true
+datatable(didonato, filter = 'top', class = 'cell-border stripe order-column', extensions = 'Buttons',
+
+                            options = list(
+                                paging = TRUE,
+                                searching = TRUE,
+                                fixedColumns = TRUE,
+                                autoWidth = TRUE,
+                                ordering = TRUE,
+                                dom = 'tB',
+                                pageLength = -1,
+                                buttons = c('copy', 'csv', 'excel')
+                            ))
+```
+
