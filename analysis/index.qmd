@@ -1,5 +1,5 @@
 ---
-title: "Fact-checking numbers and dates in the story"
+title: "Final analysis with text from story"
 execute:
   output: false
   #echo: false
@@ -286,7 +286,7 @@ didonato <- df %>%
   filter(name == "James DiDonato") %>% 
   mutate(days_to_conference = as.numeric(date_of_incident - date_of_conference)) %>%
   mutate(days_to_letter = as.numeric(date_of_incident - date_of_letter)) %>% 
-  select(name, date_of_incident, date_of_letter, days_to_letter, days_of_suspension, excessive_force, excessive_force_during_arrest)
+  select(name, date_of_incident, date_of_letter, days_to_letter, days_of_suspension)
 
 
 ```
