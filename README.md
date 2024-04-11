@@ -2,7 +2,7 @@
 
 This repository contains data and findings for an ongoing investigation in collaboration with MuckRock and New York Focus about cases of misconduct and abuse at the hands of the "Peace Officers" of the New York City’s Department of Homeless Services Police (DHS).
 
-## Data
+## Documents and data
 ### Documents we obtained
 We filed open-records requests to New York City’s Department of Homeless Services (DHS) for all disciplinary files the agency is required to disclose under Brady-Giglio, which flags officers who may be untrustworthy in court. The agency is required to provide these documents to the public after the June 2020 repeal of 50-a, a law that had previously kept police disciplinary files secret.
 
@@ -27,7 +27,7 @@ This brought the final total of incidents in our database to 66, involving 31 of
 ### Turning documents into data 
 In response to our open-records requests to the DHS, we received disciplinary documents for a total of 66 incidents. Over several months, we reviewed these documents, turned the information gleaned from them into a database by manually entering details from the documents into a spreadsheet. Afterwards, we analyzed the data for trends in which officers were responsible for misconduct and how that misconduct was handled by the agency. Sammy Sussman manually went through all the documents to log the data describing each incident, Annika Grosser cleaned, analyzed and visualized the data, and Dillon Bergin fact-checked the results.
 
-**The database we created is in `data/manual/document_annotation_data.xlsx`
+**The database we created is in [`data/manual/document_annotation_data.xlsx`](data/manual)**.
 
 ### Manually recorded data from the documents
 
@@ -56,7 +56,8 @@ The DHS’s so-called ‘Peace Officers’ carry nonlethal weapons (batons and p
 - Suspension days in these cases vary greatly, ranging from five to 55 days across the 14 excessive use of force cases.
 - We recorded the days of immediate suspension the officer served after the incident, the suspension given in the official implementation letter, the suspension still to be served from that point on, as well as suspension in abeyance and the abeyance period. In some cases, officers also lost leave balance or received no pay.
 
-**The results of our analysis are in `analysis/findings`
+**The results of our analysis are in [`analysis/findings`](analysis)**.
+
 ## Questions/feedback 
 Reach out to us! Annika Grosser, annikajgrosser@gmail.com or Sammy Sussman, sammybsussman@gmail.com 
  
