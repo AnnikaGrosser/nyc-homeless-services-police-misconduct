@@ -1,10 +1,10 @@
 # nyc-homeless-services-police-misconduct
 
-This repository contains data and findings for an ongoing investigation in collaboration with MuckRock and New York Focus about cases of misconduct and abuse at the hands of peace officers of the New York City’s Department of Homeless Services Police (DHS).
+This repository contains data and findings for an [ongoing investigation](https://nysfocus.com/2024/04/15/new-york-city-homeless-abuse-police) in collaboration with MuckRock and New York Focus about cases of misconduct and abuse at the hands of peace officers of the [New York City’s Department of Homeless Services Police](https://www.youtube.com/watch?v=OzejEheDjUo) (DHS).
 
 ## Documents and data
 ### Department of Homeless Services documents we obtained
-We filed open-records requests to New York City’s Department of Homeless Services (DHS) for all disciplinary files the agency is required to disclose under Brady v. Maryland and Giglio v. United States, two cases that force police departments and prosecutors to flag officers who may be untrustworthy in court. DHS began providing these documents to district attorney’s offices after the June 2020 repeal of 50-a, a law that had previously kept police disciplinary files secret. These files are being made public for the first time.
+We filed open-records requests to New York City’s Department of Homeless Services (DHS) for all disciplinary files the agency is required to disclose under Brady v. Maryland and Giglio v. United States, two cases that force police departments and prosecutors to flag officers who may be untrustworthy in court. DHS began providing these documents to district attorney’s offices after [the June 2020 repeal of 50-a](https://www.rcfp.org/50-a-repeal-police-misconduct/), a law that had previously kept police disciplinary files secret. These files are being made public for the first time.
 
 ### Limitations in scope of documents and time period 
 These disciplinary files may not be every disciplinary file pertaining to an officer employed by the DHS. Instead, these are records that were provided to prosecutors under the prosecutors' obligations to provide materials like this to criminal defendants.
